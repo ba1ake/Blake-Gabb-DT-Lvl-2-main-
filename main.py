@@ -9,7 +9,6 @@ world = []
 def worldgen(x,y,seed):
   #this is some code i got in order toit get vaules via pnoise2, it is a simple algorwith that helps and such
  tile = (pnoise2(x/seed,y/seed,2))
-  #print(tile)
   #gen's a vaule from -1 to 1
 
  #this checks to see if player is in range of spawn this uses pyshics vectors to do the maths to find out if it is
@@ -41,16 +40,16 @@ def worldgen(x,y,seed):
      return(".")
  else: # just ocean
   if tile > 0.3:
-    return ("/")
+    return ("/") # this should try to resemble some ice bergs or something
   else:
    return("-")
 
 #### MAIN LOOP ####
 
 #seed effects the sises of the islands and such
-spawnrange = 99999 # this is how random-ness works for this program as the vaule x and y determins the seed so by having a massive range the randomness is increseed
+spawnrange = 1 # this is how random-ness works for this program as the vaule x and y determins the seed so by having a massive range the randomness is increseed
 #this makes it so that the player has the same map but has a diffrent spawn region each time
-seed = 22
+seed = 16
 x = spawn(spawnrange)
 y = spawn(spawnrange)
 maxy = 31# rendering sise for x axis
@@ -94,11 +93,10 @@ while True:
   elif land == "x":
     sys.stdout.write(u"\u001b[43;1m  ") # yellow
   elif land == "H":
-    sys.stdout.write(u"\u001b[43m  ") #diffrent shade of yellow
+    sys.stdout.write(u"\u001b[43m  ") #diffrent shade of yellow but i dont think it works in repl.it
     
   else:
     sys.stdout.write(u"\u001b[44m  ")
-  #x+=1
   #this is when libne hits the 30th pixal
   if xdone == (maxx): #= 30
     #drops down to the bigeiing of the nest line so that the sising code works
@@ -108,19 +106,9 @@ while True:
     xdone = 0
     ydone += 1
     y += 1
-    #print(ydone)
-    #time.sleep(1)
   if ydone == (maxy):
     # brings the cursor to the start.
     #finsihs when this fully renders(there seems to be a glitch with the render)
-    #ree = input(""
-    #print(x,y,vector,biome)
-    """
-    print(x)
-    print(y)
-    print(vector)
-    print(biome)
-    """
     break
   x += 1
   xdone += 1
