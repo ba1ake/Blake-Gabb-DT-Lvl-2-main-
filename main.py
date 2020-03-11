@@ -39,7 +39,10 @@ def worldgen(x,y,seed):
      return ("|")
    else:
      return(".")
- else:
+ else: # just ocean
+  if tile > 0.3:
+    return ("/")
+  else:
    return("-")
 
 #### MAIN LOOP ####
