@@ -1,0 +1,89 @@
+from noise import pnoise2
+import sys
+"""
+#code to do random gen of perlin
+seed = 22
+
+x = 200
+y = -100
+
+print(pnoise2(x/seed,y/seed,1))
+"""
+#this is the world genartor using perlin noise
+world = []
+def worldgen(x,y,seed):
+  tile = (pnoise2(x/seed,y/seed,1))
+  #print(tile)
+  #gen's a vaule from -1 to 1
+  if tile > 0.14:
+    #if vaule is .8 - 1 it is a mountain
+    return("/")
+  elif tile > 0.1:
+    return("+")
+    #if vaule is .6 - .8
+  elif tile > 0.08:
+    return(".")
+    #if vaule is .3 - .3 it is light water
+  else:
+    return("-")
+    #lower vaules are deep water
+
+
+def render(x,y):
+  place = y*15
+  #print(y)
+  place = place + x
+  #converts the x y to line in the array
+  land = world[place]
+  #depending on land this wil print and then add color to it to make it look good
+  if land == "/":
+    sys.stdout.write(u"\u001b[40m/")
+  elif land == "+":
+    sys.stdout.write(u"\u001b[42m+")
+  elif land == ".":
+    sys.stdout.write(u"\u001b[46m.")
+  else:
+    sys.stdout.write(u"\u001b[44m-")
+  #reminder add the go to top thingy
+
+    
+
+#main loop
+x = 1
+y = 1
+seed = 22
+while True:
+  landpeace = worldgen(x,y,seed)
+  world.append(landpeace)
+  x += 1
+  #print(x)
+  #print(y)
+  if x > 15:
+    x = 1
+    y +=1
+  if y > 15:
+    break
+
+
+times = 0
+#print(world)
+x = 0
+y = 1
+while True:
+  render(x,y)
+  if x == 30:
+    sys.stdout.write(u"\u001b[1000D")
+    sys.stdout.write(u"\u001b[1B")
+  times += 1
+  x += 1
+  if x > 30:
+    x = 0
+    y += 1
+  if y > 15:
+    break
+ 
+
+
+
+
+   
