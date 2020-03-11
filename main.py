@@ -6,6 +6,25 @@ def spawn(spawnrange):
   return(random.randint((spawnrange*-1 ), spawnrange))
 #this is the world genartor using perlin noise
 world = []
+"""
+def clear():
+  #this is to clear the line
+  print("                                   ")
+  sys.stdout.write(u"\u001b[1A")
+  sys.stdout.write(u"\u001b[1000D")
+"""
+def clean():
+  #this whole part is to wipe the screen to make it look good
+        sys.stdout.write(u"\u001b[1A")
+        sys.stdout.write(u"\u001b[1A")
+        sys.stdout.write(u"\u001b[1000D")
+        print("                                   ")
+        print("                                   ")
+        sys.stdout.write(u"\u001b[1A")
+        sys.stdout.write(u"\u001b[1A")
+        sys.stdout.write(u"\u001b[1000D")
+
+
 def worldgen(x,y,seed):
   #this is some code i got in order toit get vaules via pnoise2, it is a simple algorwith that helps and such
  tile = (pnoise2(x/seed,y/seed,2))
@@ -49,22 +68,38 @@ def worldgen(x,y,seed):
 #seed effects the sises of the islands and such
 spawnrange = 1 # this is how random-ness works for this program as the vaule x and y determins the seed so by having a massive range the randomness is increseed
 #this makes it so that the player has the same map but has a diffrent spawn region each time
-seed = 16
+seed = 15
 x = spawn(spawnrange)
 y = spawn(spawnrange)
-maxy = 31# rendering sise for x axis
-# rend5ering sise for x axis
-maxx = 31 #b10 +1 from wanted sise for border rendering sise for y axis
+
+
+
+
+# this just gets the render sise
+rendersise = input("choose render sise, and please have it as an even number ")
+try:
+  rendersise = int(rendersise)
+except:
+  print("not a int, setting to 30")
+  rendersise = 30 
+if rendersise % 2 == 0:
+  pass
+else:
+  rendersise += 1
+  print("number was not even, adding one to it to fix this")
+  tim.sleep(1)
+maxy = 31
+maxx = 31
 posx = x
 posy = y
 xdone = 0
 ydone = 0
-spawnrange = 100
+spawnrange = 1
 
 while True:
  sys.stdout.write("\033[0;0f")
- posx -= 1 #this is for testing this moves to left
- posy += 1
+ #posx -= 1 #this is for testing this moves to left
+ #posy += 1
  x = posx
  y = posy
  ydone = 0
@@ -109,8 +144,40 @@ while True:
   if ydone == (maxy):
     # brings the cursor to the start.
     #finsihs when this fully renders(there seems to be a glitch with the render)
+    action = input("what do you want to do ")
+    if action == "move": # this is the module for getting the player to move
+      #clear()
+      while True:
+       try:
+        distance = int(input("now far "))
+        break
+       except:
+        print("not a str")
+        time.sleep(1)
+        clean()
+      if distance > 10:
+        print("to far moving by ten")
+        time.sleep(1)
+        distance = 10
+        print("")
+        clean()
+      move = input("where? ")
+      if move == "up":
+        posy -= distance
+      elif move == "down":
+        posy += distance
+      elif move == "left":
+        posx -= distance
+      elif move == "right":
+        posx += distance
+      clean()
+      clean()
+    else:
+      print("please retry")
+      clean()
     break
   x += 1
   xdone += 1
+  #this starts work on the next pixal
 
 
