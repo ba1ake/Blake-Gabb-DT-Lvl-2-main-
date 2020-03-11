@@ -15,7 +15,7 @@ def worldgen(x,y,seed):
  #this checks to see if player is in range of spawn this uses pyshics vectors to do the maths to find out if it is
  #vector = 1 #this is for testing purposes
  biome = (pnoise2(x/(seed*10),y/(seed*10),2))
- if biome > 0:
+ if biome > -0.1:
   if tile > 0.25:
     return("/")
   elif tile > 0.10:
@@ -29,21 +29,20 @@ def worldgen(x,y,seed):
     return(".")
     #if vaule is .3 - .3 it is light water
     #lower vaules are deep water
- elif biome > -0.5: #sand biome
+ elif biome > -0.3: #hilly boi biome
 
-   if tile > 0.2:
-    return("H")
+   if tile > .10:
+     return("=")
+   elif tile > -0.1:
+     return ("/")
    elif tile > -0.3:
-     return("x")
-   elif tile > -0.5:
-     return (".")
+     return ("|")
    else:
-     return("-")
+     return(".")
  else:
    return("-")
 
-    
-   
+#### MAIN LOOP ####
 
 #seed effects the sises of the islands and such
 spawnrange = 99999 # this is how random-ness works for this program as the vaule x and y determins the seed so by having a massive range the randomness is increseed
@@ -53,7 +52,7 @@ x = spawn(spawnrange)
 y = spawn(spawnrange)
 maxy = 31# rendering sise for x axis
 # rend5ering sise for x axis
-maxx = 31 #be +1 from wanted sise for border rendering sise for y axis
+maxx = 31 #b10 +1 from wanted sise for border rendering sise for y axis
 posx = x
 posy = y
 xdone = 0
@@ -70,28 +69,29 @@ while True:
  xdone = 1
  #rendering
  while True:
+   #this is all the vaules for the rending color,   
   land = worldgen(x,y,seed)
   if ydone == 0:
-    sys.stdout.write(u"\u001b[41m  ")
+    sys.stdout.write(u"\u001b[41m  ")#red
   elif ydone == (maxy-1):
-    sys.stdout.write(u"\u001b[41m  ")
+    sys.stdout.write(u"\u001b[41m  ")#red
   elif xdone == (maxx):
-    sys.stdout.write(u"\u001b[41m  ")
+    sys.stdout.write(u"\u001b[41m  ")#red
   elif land == "+":
-     sys.stdout.write(u"\u001b[42m  ")
+     sys.stdout.write(u"\u001b[42m  ")#green
      #this checks to see if it needs to re render the color
   elif land == "=":
-    sys.stdout.write(u"\u001b[40m  ")
+    sys.stdout.write(u"\u001b[40m  ")#black
   elif land == "/":
-     sys.stdout.write(u"\u001b[47m  ")
+     sys.stdout.write(u"\u001b[47m  ")#white
   elif land == ".":
-    sys.stdout.write(u"\u001b[46m  ")
+    sys.stdout.write(u"\u001b[46m  ")#cyan
   elif land == "|":
-    sys.stdout.write(u"\u001b[40m  ") 
+    sys.stdout.write(u"\u001b[40m  ") #black
   elif land == "x":
-    sys.stdout.write(u"\u001b[43;1m  ") 
+    sys.stdout.write(u"\u001b[43;1m  ") # yellow
   elif land == "H":
-    sys.stdout.write(u"\u001b[43m  ") 
+    sys.stdout.write(u"\u001b[43m  ") #diffrent shade of yellow
     
   else:
     sys.stdout.write(u"\u001b[44m  ")
