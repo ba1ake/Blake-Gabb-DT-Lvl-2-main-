@@ -24,7 +24,7 @@ def clean():
         sys.stdout.write(u"\u001b[1A")
         sys.stdout.write(u"\u001b[1000D")
 
-
+energy = 100
 def worldgen(x,y,seed):
   #this is some code i got in order toit get vaules via pnoise2, it is a simple algorwith that helps and such
  tile = (pnoise2(x/seed,y/seed,2))
@@ -33,8 +33,13 @@ def worldgen(x,y,seed):
  #this checks to see if player is in range of spawn this uses pyshics vectors to do the maths to find out if it is
  #vector = 1 #this is for testing purposes
  biome = (pnoise2(x/(seed*10),y/(seed*10),2))
- if biome > -0.1:
-  if tile > 0.25:
+ if biome > 0.3:#acrapellgo
+  if tile > 0.10:
+    return("+")
+  else:
+    print(".")
+ if biome > -0.1:#grassssssssssss
+  if tile > 0.35:
     return("/")
   elif tile > 0.10:
     return("|")
@@ -87,9 +92,9 @@ if rendersise % 2 == 0:
 else:
   rendersise += 1
   print("number was not even, adding one to it to fix this")
-  tim.sleep(1)
-maxy = 31
-maxx = 31
+  time.sleep(1)
+maxy = rendersise
+maxx = rendersise
 posx = x
 posy = y
 xdone = 0
@@ -142,12 +147,20 @@ while True:
     ydone += 1
     y += 1
   if ydone == (maxy):
+    sys.stdout.write(u"\u000b")
     # brings the cursor to the start.
     #finsihs when this fully renders(there seems to be a glitch with the render)
+    sys.stdout.write(u"\u001b[0m")
     action = input("what do you want to do ")
     if action == "move": # this is the module for getting the player to move
+
       #clear()
       while True:
+       if energy == 0:
+         print("to tired to move, you have died.")
+         exit()
+       else:
+          ree = 1
        try:
         distance = int(input("now far "))
         break
@@ -172,9 +185,31 @@ while True:
         posx += distance
       clean()
       clean()
+      energy -= distance
+    elif action == "sleep":
+     backupx = posx
+     backupy = posy
+     posx = (rendersise/2) + posx
+     posy = (rendersise / 2) + posy
+     if worldgen(x,y,seed) == "+":
+      sleep = 50
+      print("you feel better")
+      time.sleep(1)
+      clean()
+     else:
+       print("cant sleep, need to be on grass to sleep")
+       time.sleep(1)
+       clean()
+     posx = backupx
+     posy = backupy
+
     else:
       print("please retry")
+      time.sleep(1)
       clean()
+    print("your energy is ", energy)
+    time.sleep(1)
+    clean()
     break
   x += 1
   xdone += 1
