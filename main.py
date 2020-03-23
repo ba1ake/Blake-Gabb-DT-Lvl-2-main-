@@ -18,13 +18,7 @@ def spawn(spawnrange):
 def clean():
   #this whole part is to wipe the screen to make it look good
         sys.stdout.write(u"\u001b[1A")
-        sys.stdout.write(u"\u001b[1A")
-        sys.stdout.write(u"\u001b[1000D")
-        print("""                                                                       """)
-        print("""                                                                       """)
-        sys.stdout.write(u"\u001b[1A")
-        sys.stdout.write(u"\u001b[1A")
-        sys.stdout.write(u"\u001b[1000D")
+        sys.stdout.write(u"\u001b[2K")#wipes line
 energy = 50
 def worldgen(x,y,seed):
   #this is some code i got in order toit get vaules via pnoise2, it is a simple algorwith that helps and such
@@ -107,7 +101,7 @@ def upgrades(xp,foodcap,movedis, energyrestore):
 #seed effects the sises of the islands and such
 spawnrange = 999999 # this is how random-ness works for this program as the vaule x and y determins the seed so by having a massive range the randomness is increseed
 #this makes it so that the player has the same map but has a diffrent spawn region each time
-seed = 15
+seed = 10
 x = spawn(spawnrange)
 y = spawn(spawnrange)
 # this just gets the render sise and makes sure its in the paramters of spawn range and not an odd number
@@ -138,6 +132,8 @@ foodcap = 5
 movedis = 10
 energyrestore = 10
 xp = 9999
+stone = 0
+iron = 1
 #the main bit
 while True:
  sys.stdout.write("\033[0;0f")#puts the curser at top of screen
@@ -167,6 +163,7 @@ while True:
   elif land == ".":
     sys.stdout.write(u"\u001b[46m  ")#cyan
   elif land == "|":
+    # gonna make this mineable blocks, so some rock can be mined at a better rate than others, and these ones have the possbliy to drop more iron, which will then be used to excape, and then maybe add a diffrent world you go to
     sys.stdout.write(u"\u001b[40m  ") #black
   elif land == "x":
     sys.stdout.write(u"\u001b[43;1m  ") # yellow
@@ -244,12 +241,6 @@ while True:
      posy = backupy
     elif action == "fish":
      food_or_scrap = random.randint(1,4)
-     if food_or_scrap == 4:
-       print("you didnt catch a fish but got some scrap")
-       scrap +=1
-       time.sleep(1)
-       clean()
-       break
      if food > foodcap:
        print("you have to many fish,")
        time.sleep(1)
@@ -260,13 +251,19 @@ while True:
      x = (rendersise/2) + posx
      y = (rendersise / 2) + posy
      if worldgen(x,y,seed) == "." or worldgen(x,y,seed) == "-":
-      print("you fished and caught a fish, congrats")
-      time.sleep(1)
-      xp += 1
-      clean()
-      food +=1
-      posy = backupy
-      posx = backupx
+       if food_or_scrap == 4:
+        print("you didnt catch a fish but got some scrap")
+        scrap +=1
+        time.sleep(1)
+        clean()
+       else:
+        print("you fished and caught a fish, congrats")
+        time.sleep(1)
+       xp += 1
+       clean()
+       food +=1
+       posy = backupy
+       posx = backupx
      else:
        print("fun fact, fishing with out water is somewhat hard to do")
        time.sleep(2)
@@ -290,6 +287,35 @@ while True:
     elif action == "xp":
       upgrades(xp,foodcap,movedis,energyrestore)
       print("you now have ",xp, " xp remaining")# the resone for this being a fucntion is i might change how it is done so by having this as a function will make it eair to move it
+    elif action == "mine":
+     stoneoriron = random.randint(1,4)
+     backupx = posx
+     backupy = posy
+     x = (rendersise/2) + posx
+     y = (rendersise / 2) + posy
+     if worldgen(x,y,seed) == "|":
+       if stoneoriron == 4:
+        print("you found some iron, lucky")
+        iron +=1
+        xp += 4 # this way it adds up to 5 per iron
+        time.sleep(1)
+        clean()
+       else:
+        print("you were able to find some stone.")
+        time.sleep(1)
+     xp += 1
+     clean()
+     stone +=1
+     posy = backupy
+     posx = backupx
+     if worldgen(x,y,seed) != "|":
+       print("you are not able to mine here")
+       time.sleep(2)
+       clean()
+       xp += 1
+     posx = backupx
+     posy = backupy
+     energy -= 1
     else:
       print("please retry")
       time.sleep(1)
