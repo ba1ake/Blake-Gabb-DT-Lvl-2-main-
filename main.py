@@ -106,17 +106,21 @@ x = spawn(spawnrange)
 y = spawn(spawnrange)
 # this just gets the render sise and makes sure its in the paramters of spawn range and not an odd number
 rendersise = input("choose render sise, and please have it as an even number ")
+clean()
 try:
   rendersise = int(rendersise)
 except:
   print("not a int, setting to 30")
   rendersise = 30 
+  time.sleep(2)
+  clean()
 if rendersise % 2 == 0:
   pass
 else:
   rendersise += 1
   print("number was not even, adding one to it to fix this")
-  time.sleep(1)
+  time.sleep(2)
+  clean()
 
 # just some stuff
 maxy = rendersise
@@ -125,7 +129,6 @@ posx = x
 posy = y
 xdone = 0
 ydone = 0
-spawnrange = 1
 food = 1
 scrap = 0
 foodcap = 5
@@ -164,7 +167,7 @@ while True:
     sys.stdout.write(u"\u001b[46m  ")#cyan
   elif land == "|":
     # gonna make this mineable blocks, so some rock can be mined at a better rate than others, and these ones have the possbliy to drop more iron, which will then be used to excape, and then maybe add a diffrent world you go to
-    sys.stdout.write(u"\u001b[40m  ") #black
+    sys.stdout.write(u"\u001b[40m::") #black
   elif land == "x":
     sys.stdout.write(u"\u001b[43;1m  ") # yellow
   elif land == "H":
@@ -191,7 +194,7 @@ while True:
       #clear()
       while True: #this is a while true loop as i can use it to auto exit a secton and skip the other parts which a normal thign wont be able to do
        if energy <= 0:
-         print("you are to tired to move, you have died due to the lack of energy to move your legs. While your body is alive it wont be for long. You can already hear the wovles stalking around.")
+         print("you have run out of enegry, GAME OVER")
          exit()
        else:
           ree = 1
@@ -203,7 +206,7 @@ while True:
         time.sleep(1)
         clean()
       if distance > movedis: #this makes sure the player doesnt go to far
-        print("to far moving by", movedis)
+        print("to far, moving by", movedis)
         time.sleep(1)
         distance = movedis
         
@@ -227,13 +230,13 @@ while True:
      backupx = posx
      backupy = posy
      x = (rendersise/2) + posx
-     y = (rendersise / 2) + posy
-     if worldgen(x,y,seed) == "+":
+     y = (rendersise / 2) + posy #this gets where the player should be
+     if worldgen(x,y,seed) == "+": # if its grass he can sleep
       energy = 50
       print("you feel better")
       time.sleep(1)
       clean()
-     else:
+     else: # if not grass he cant sleep
        print("cant sleep, need to be on grass to sleep")
        time.sleep(1)
        clean()
@@ -242,7 +245,7 @@ while True:
     elif action == "fish":
      food_or_scrap = random.randint(1,4)
      if food > foodcap:
-       print("you have to many fish,")
+       print("you have to many fish")
        time.sleep(1)
        clean()
        break
