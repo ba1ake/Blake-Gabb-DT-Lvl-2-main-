@@ -2,6 +2,7 @@ from noise import pnoise2
 import sys
 import time
 import random
+from os import system
 # to do
 #fix sleeping, fixed i think, i might even remove it
 
@@ -134,7 +135,7 @@ scrap = 0
 foodcap = 5
 movedis = 10
 energyrestore = 10
-xp = 9999
+xp = 0
 stone = 0
 iron = 1
 #the main bit
@@ -186,7 +187,7 @@ while True:
   if ydone == (maxy): # this is when the whole thing has rendered and contains options like moveing, sleeping, maybe eating at some point
     sys.stdout.write(u"\u000b")
     # brings the cursor to the start.
-    #finsihs when this fully renders(there seems to be a glitch with the render)
+    #finsihs when this fully renders(there seems to be a glitch with the render) fixxed
     sys.stdout.write(u"\u001b[0m")
     action = input("what do you want to do ")
     if action == "move": # this is the module for getting the player to move
@@ -326,6 +327,7 @@ while True:
     print("your energy is ", energy)
     time.sleep(1)
     clean()
+    system('clear')#this wipes screen for next render
     break
   x += 1
   xdone += 1
