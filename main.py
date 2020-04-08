@@ -213,7 +213,7 @@ while True:
         
         print("")
         clean()
-      move = input("where? ")
+      move = input("where? ")#all the vaild options
       if move == "up":
         posy -= distance
       elif move == "down":
@@ -222,6 +222,9 @@ while True:
         posx -= distance
       elif move == "right":
         posx += distance
+      else:
+        print("invaild direction")
+        energy += distance# this is so that the energy stays the same
       clean()
       clean()
       energy -= distance
@@ -292,12 +295,12 @@ while True:
       upgrades(xp,foodcap,movedis,energyrestore)
       print("you now have ",xp, " xp remaining")# the resone for this being a fucntion is i might change how it is done so by having this as a function will make it eair to move it
     elif action == "mine":
-     stoneoriron = random.randint(1,4)
-     backupx = posx
+     stoneoriron = random.randint(1,4)#gets wether or not its iron
+     backupx = posx# backups pos's
      backupy = posy
      x = (rendersise/2) + posx
-     y = (rendersise / 2) + posy
-     if worldgen(x,y,seed) == "|":
+     y = (rendersise / 2) + posy#converts pos's to the players pos
+     if worldgen(x,y,seed) == "|":#checks to see if its a ore rich block
        if stoneoriron == 4:
         print("you found some iron, lucky")
         iron +=1
@@ -312,12 +315,12 @@ while True:
      stone +=1
      posy = backupy
      posx = backupx
-     if worldgen(x,y,seed) != "|":
+     if worldgen(x,y,seed) != "|":#CHECKS to see if its not an orerich stone
        print("you are not able to mine here")
        time.sleep(2)
        clean()
-       xp += 1
-     posx = backupx
+       energy += 1 # once agin to counter so no energy is used up
+     posx = backupx#restores back up's
      posy = backupy
      energy -= 1
     else:
