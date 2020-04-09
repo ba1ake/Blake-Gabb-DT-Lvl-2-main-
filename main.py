@@ -5,7 +5,9 @@ import random
 from os import system
 # to do
 #fix sleeping, fixed i think, i might even remove it
-
+playerdata = [[0,0],[0,0,0]]
+#the first list will be player exploring, there will be xp gained and distance travled
+# the second list will be upgrades done, items mined, items fished,
 
 
 
@@ -69,7 +71,7 @@ def upgrades(xp,foodcap,movedis, energyrestore):
   time.sleep(2)
   print()
   clean()
-  option = input("press and enter 1, for max food, 2 for speed, or 3 for energy from food ")
+  option = input("press and enter 1 for max food, 2 for speed, or 3 for energy from food ")
   time.sleep(1)
   print()
   clean()
@@ -92,9 +94,15 @@ def upgrades(xp,foodcap,movedis, energyrestore):
       time.sleep(1)
       clean()
       xp -= 25
+    elif option == "exit":
+      print('exiting')
+      return
+    else:
+      ("invaild input, exiting from xp menu")
+      return
   else:
-    print()("you dont have enough xp to upgrade a skill, move around and do stuff.")
-    time.sleep(1)
+    print("you dont have enough xp to upgrade a skill, move around and do stuff to gain xp.")
+    time.sleep(2)
     clean()
       
   
@@ -111,8 +119,8 @@ clean()
 try:
   rendersise = int(rendersise)
 except:
-  print("not a int, setting to 30")
-  rendersise = 30 
+  print("not a int, setting to 20")
+  rendersise = 20
   time.sleep(2)
   clean()
 if rendersise % 2 == 0:
@@ -122,6 +130,7 @@ else:
   print("number was not even, adding one to it to fix this")
   time.sleep(2)
   clean()
+  system('clear')
 
 # just some stuff
 maxy = rendersise
@@ -224,9 +233,15 @@ while True:
         posx += distance
       else:
         print("invaild direction")
+        time.sleep(2)
         energy += distance# this is so that the energy stays the same
       clean()
       clean()
+      if distance < 0:
+        distance = distance * -1
+      else:
+        ree = 0 # this is ment to just pass this with out issues
+  
       energy -= distance
       
       #this makes them only able to wal a curtain distance 
