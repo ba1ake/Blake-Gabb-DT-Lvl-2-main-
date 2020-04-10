@@ -5,7 +5,7 @@ import random
 from os import system
 # to do
 #fix sleeping, fixed i think, i might even remove it
-playerdata = [[0,0],[0,0,0]]
+playerdata = [[0,0],[0,0,0,0,0]]
 #the first list will be player exploring, there will be xp gained and distance travled
 # the second list will be upgrades done, items mined, items fished,
 
@@ -13,7 +13,46 @@ playerdata = [[0,0],[0,0,0]]
 
 
 
-
+def gameover(playerdata):
+  print("you traveled over ", playerdata[0][0], " blocks over all")
+  #this section gets all the data from the muti dimesion array and then prints it as a score board for the player and then uses it to get an over all score, it is dont as a function as there is two ways of getting the game over
+  time.sleep(2)
+  print("you gained ", playerdata[0][1], " xp")
+  time.sleep(2)
+  print("you fished ", playerdata[1][3], " fishs")
+  time.sleep(2)
+  print("you found ", playerdata[1][4], " scrap")
+  time.sleep(2)
+  print("you gained ", playerdata[1][0], " upgrades")
+  time.sleep(2)
+  print("you mined ", playerdata[1][1], " iron")
+  time.sleep(2)
+  print("you mined ", playerdata[1][2], " stone")
+  time.sleep(2)
+  print("this gives you a grand total of...")
+  score = ((playerdata[0][0]) +(playerdata[0][1]))
+  score += ((playerdata[1][0])* 10)
+  score += ((playerdata[1][1]) * 2)
+  score += (playerdata[1][2])
+  score += ((playerdata[1][3])*2)
+  score += ((playerdata[1][4])*5)
+  print("your overall score is...")
+  time.sleep(1)
+  if score == 0:
+    print("you have 0 score.")
+    time.sleep(2)
+    input("press enter to exit")
+    exit()
+  for i in range(0, score):
+        sys.stdout.write(u"\u001b[1000D")
+        sys.stdout.flush()
+        sys.stdout.write(str(i + 1))
+        sys.stdout.flush()
+        time.sleep(0.1)
+  print("!")
+  time.sleep(2)
+  input("press enter to exit")
+  exit()
 def spawn(spawnrange):
   return(random.randint((spawnrange*-1 ), spawnrange))
   #this gens the spawn area to a range set.
@@ -69,6 +108,10 @@ def upgrades(xp,foodcap,movedis, energyrestore):
   clean()
   print("you have", xp,"xp, it costs 25 to upgrade")
   time.sleep(2)
+  if xp < 25:
+    print("you do not have enough to upgrade your skills")
+    time.sleep(2)
+    return
   print()
   clean()
   option = input("press and enter 1 for max food, 2 for speed, or 3 for energy from food ")
@@ -80,6 +123,7 @@ def upgrades(xp,foodcap,movedis, energyrestore):
       print("max food cap has been upgraded to", foodcap + 1)
       time.sleep(1)
       clean()
+      playerdata[1][0] += 1 # this addes one upgrade to the count
       foodcap += 1
       xp -=25
     elif option == "2":
@@ -87,11 +131,13 @@ def upgrades(xp,foodcap,movedis, energyrestore):
       time.sleep(1)
       clean()
       movedis +=2
+      playerdata[1][0] += 1 # this addes one upgrade to the count
       xp -= 25
     elif option == "3":
       energyrestore += 1
       print("food now restores", energyrestore, "energy")
       time.sleep(1)
+      playerdata[1][0] += 1 # this addes one upgrade to the count
       clean()
       xp -= 25
     elif option == "exit":
@@ -101,7 +147,7 @@ def upgrades(xp,foodcap,movedis, energyrestore):
       ("invaild input, exiting from xp menu")
       return
   else:
-    print("you dont have enough xp to upgrade a skill, move around and do stuff to gain xp.")
+    print("closing menu. dont forget aswell, it takes 25 xp")
     time.sleep(2)
     clean()
       
@@ -159,7 +205,7 @@ while True:
    #this is all the vaules for the rending color, 
   land = worldgen(x,y,seed)
   if ydone == (0.5 * rendersise) and xdone == (0.5 * rendersise):
-    sys.stdout.write(u"\u001b[41m  ")
+    sys.stdout.write(u"\u001b[41m**") # the player
   elif ydone == 0:
     sys.stdout.write(u"\u001b[41m  ")#red for border
   elif ydone == (maxy-1):
@@ -205,7 +251,8 @@ while True:
       while True: #this is a while true loop as i can use it to auto exit a secton and skip the other parts which a normal thign wont be able to do
        if energy <= 0:
          print("you have run out of enegry, GAME OVER")
-         exit()
+         time.sleep(2)
+         gameover(playerdata)
        else:
           ree = 1
        try:
@@ -235,6 +282,7 @@ while True:
         print("invaild direction")
         time.sleep(2)
         energy += distance# this is so that the energy stays the same
+        distance = 0
       clean()
       clean()
       if distance < 0:
@@ -243,6 +291,13 @@ while True:
         ree = 0 # this is ment to just pass this with out issues
   
       energy -= distance
+
+      playerdata[0][0] += distance#distance travled
+      playerdata[0][1] += distance#xp gained
+      """
+      print(playerdata)
+      time.sleep(3)
+      """
       
       #this makes them only able to wal a curtain distance 
     elif action == "sleep": #see if can sleep
@@ -276,12 +331,15 @@ while True:
        if food_or_scrap == 4:
         print("you didnt catch a fish but got some scrap")
         scrap +=1
+        playerdata[1][4] += 1 # adds to the scrap pver all count
         time.sleep(1)
         clean()
        else:
         print("you fished and caught a fish, congrats")
         time.sleep(1)
        xp += 1
+       playerdata[0][1] += 1 # adds xp count
+       playerdata[1][3] += 1 # adds to the fished pver all count
        clean()
        food +=1
        posy = backupy
@@ -290,7 +348,6 @@ while True:
        print("fun fact, fishing with out water is somewhat hard to do")
        time.sleep(2)
        clean()
-       xp += 1
      posx = backupx
      posy = backupy
     elif action == "eat": #this is if the player has food and if so lets them reafina some energy back from it but no more than 50
@@ -302,6 +359,9 @@ while True:
         clean()
         if energy > 50:
           energy = 50
+      if action == "die":
+        print("you died,")
+        time.sleep(3)
       else:
         print("you know, you can really eat food thats not there. Right?")
         time.sleep(1)
@@ -317,31 +377,41 @@ while True:
      y = (rendersise / 2) + posy#converts pos's to the players pos
      if worldgen(x,y,seed) == "|":#checks to see if its a ore rich block
        if stoneoriron == 4:
-        print("you found some iron, lucky")
+        print("you mined some iron, lucky")
+        playerdata[1][1] += 1 # adds one to the iron count
         iron +=1
-        xp += 4 # this way it adds up to 5 per iron
-        time.sleep(1)
+        xp += 4
+        playerdata[0][1] += 4 # this way it adds up to 5 per iron xp-wise
+        time.sleep(2)
         clean()
        else:
-        print("you were able to find some stone.")
-        time.sleep(1)
+        print("you were able to mine some stone.")
+        stone += 2
+        playerdata[1][2] += 2 # adds 2 to the stone count overall
+        time.sleep(2)
      xp += 1
+     playerdata[0][1] += 1
      clean()
-     stone +=1
      posy = backupy
      posx = backupx
      if worldgen(x,y,seed) != "|":#CHECKS to see if its not an orerich stone
        print("you are not able to mine here")
        time.sleep(2)
        clean()
-       energy += 1 # once agin to counter so no energy is used up
+       energy += 5 # once agin to counter so no energy is used up
      posx = backupx#restores back up's
      posy = backupy
-     energy -= 1
+     energy -= 5
+    elif action == "quit":
+      gameover(playerdata)
     else:
       print("please retry")
       time.sleep(1)
       clean()
+    if energy <= 0:
+         print("you have run out of enegry, GAME OVER")
+         time.sleep(2)
+         gameover(playerdata)
     print("your energy is ", energy)
     time.sleep(1)
     clean()
