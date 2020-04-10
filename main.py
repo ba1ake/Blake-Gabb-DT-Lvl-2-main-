@@ -44,11 +44,11 @@ def gameover(playerdata):
     input("press enter to exit")
     exit()
   for i in range(0, score):
-        sys.stdout.write(u"\u001b[1000D")
-        sys.stdout.flush()
-        sys.stdout.write(str(i + 1))
-        sys.stdout.flush()
-        time.sleep(0.1)
+    sys.stdout.write(u"\u001b[1000D")
+    sys.stdout.flush()
+    sys.stdout.write(str(i + 1))
+    sys.stdout.flush()
+    time.sleep(0.1)
   print("!")
   time.sleep(2)
   input("press enter to exit")
@@ -72,7 +72,7 @@ def worldgen(x,y,seed):
  biome = (pnoise2(x/(seed*10),y/(seed*10),2))
  if biome > 0.3:#acrapellgo
   if tile > 0.20:
-    return("+")
+    return("+") #grass
   else:
     print(".")
  if biome > -0.1:#grassssssssssss
@@ -83,12 +83,13 @@ def worldgen(x,y,seed):
     #if vaule is .6 - 1 it is a mountain
   elif tile > -0.3: # if it ='s it will be land
     return("+")
-  
     #if vaule is .1 - .6
   elif tile > -0.4: # will be light water
     return(".")
     #if vaule is .3 - .3 it is light water
     #lower vaules are deep water
+  else:
+    return("-")
  elif biome > -0.3: #hilly boi biome
 
    if tile > .10:
@@ -228,6 +229,8 @@ while True:
     sys.stdout.write(u"\u001b[43;1m  ") # yellow
   elif land == "H":
     sys.stdout.write(u"\u001b[43m  ") #diffrent shade of yellow but i dont think it works in repl.it  
+  elif land == "-":
+    sys.stdout.write(u"\u001b[44m  ")
   else:
     sys.stdout.write(u"\u001b[44m  ")
   #this is when line hits the 30th pixal
@@ -253,8 +256,6 @@ while True:
          print("you have run out of enegry, GAME OVER")
          time.sleep(2)
          gameover(playerdata)
-       else:
-          ree = 1
        try:
         distance = int(input("now far "))
         break
@@ -342,6 +343,7 @@ while True:
        playerdata[1][3] += 1 # adds to the fished pver all count
        clean()
        food +=1
+       energy -= 1
        posy = backupy
        posx = backupx
      else:
