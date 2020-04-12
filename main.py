@@ -1,58 +1,30 @@
-from noise import pnoise2
 import sys
 import time
 import random
 from os import system
+from functions import renderscreen
+from functions import worldgen
+from functions import gameover
 # to do
 #fix sleeping, fixed i think, i might even remove it
 playerdata = [[0,0],[0,0,0,0,0]]
 #the first list will be player exploring, there will be xp gained and distance travled
 # the second list will be upgrades done, items mined, items fished,
+print("welcome to my game, first things first this is a survial game, it is text based so you, the player, will have to enter text commands to make your player move,")
+time.sleep(4)
+input("press enter when ready...")
+system("clear")
+print("there are diffrent tpyes of blocks, green blocks are grass, they let you sleep on them, grey blocks are stone, you can not sleep on them. If they have a '::' pattern on them then you are able to mine on them and get iron or stone, light blue blocks is shallow water, and dark blue blocks is deep water, on both of these tiles you are able to fish for, well, fish, and finally white tiles are snow. your player is shown by the red pixal in the center of the screen")
+time.sleep(4)
+input("press enter when ready...")
+print("the commands are, move, eat, fish, xp, and sleep")
+input("press enter when ready to start...")
+system("clear")
 
 
 
 
-
-def gameover(playerdata):
-  print("you traveled over ", playerdata[0][0], " blocks over all")
-  #this section gets all the data from the muti dimesion array and then prints it as a score board for the player and then uses it to get an over all score, it is dont as a function as there is two ways of getting the game over
-  time.sleep(2)
-  print("you gained ", playerdata[0][1], " xp")
-  time.sleep(2)
-  print("you fished ", playerdata[1][3], " fishs")
-  time.sleep(2)
-  print("you found ", playerdata[1][4], " scrap")
-  time.sleep(2)
-  print("you gained ", playerdata[1][0], " upgrades")
-  time.sleep(2)
-  print("you mined ", playerdata[1][1], " iron")
-  time.sleep(2)
-  print("you mined ", playerdata[1][2], " stone")
-  time.sleep(2)
-  print("this gives you a grand total of...")
-  score = ((playerdata[0][0]) +(playerdata[0][1]))
-  score += ((playerdata[1][0])* 10)
-  score += ((playerdata[1][1]) * 2)
-  score += (playerdata[1][2])
-  score += ((playerdata[1][3])*2)
-  score += ((playerdata[1][4])*5)
-  print("your overall score is...")
-  time.sleep(1)
-  if score == 0:
-    print("you have 0 score.")
-    time.sleep(2)
-    input("press enter to exit")
-    exit()
-  for i in range(0, score):
-    sys.stdout.write(u"\u001b[1000D")
-    sys.stdout.flush()
-    sys.stdout.write(str(i + 1))
-    sys.stdout.flush()
-    time.sleep(0.1)
-  print("!")
-  time.sleep(2)
-  input("press enter to exit")
-  exit()
+#some functions remain in this file
 def spawn(spawnrange):
   return(random.randint((spawnrange*-1 ), spawnrange))
   #this gens the spawn area to a range set.
@@ -62,49 +34,6 @@ def clean():
         sys.stdout.write(u"\u001b[1A")
         sys.stdout.write(u"\u001b[2K")#wipes line
 energy = 50
-def worldgen(x,y,seed):
-  #this is some code i got in order toit get vaules via pnoise2, it is a simple algorwith that helps and such
- tile = (pnoise2(x/seed,y/seed,2))
-  #gen's a vaule from -1 to 1
-
- #this checks to see if player is in range of spawn this uses pyshics vectors to do the maths to find out if it is
- #vector = 1 #this is for testing purposes
- biome = (pnoise2(x/(seed*10),y/(seed*10),2))
- if biome > 0.3:#acrapellgo
-  if tile > 0.20:
-    return("+") #grass
-  else:
-    print(".")
- if biome > -0.1:#grassssssssssss
-  if tile > 0.35:
-    return("/")
-  elif tile > 0.10:
-    return("|")
-    #if vaule is .6 - 1 it is a mountain
-  elif tile > -0.3: # if it ='s it will be land
-    return("+")
-    #if vaule is .1 - .6
-  elif tile > -0.4: # will be light water
-    return(".")
-    #if vaule is .3 - .3 it is light water
-    #lower vaules are deep water
-  else:
-    return("-")
- elif biome > -0.3: #hilly boi biome
-
-   if tile > .10:
-     return("=") #edges of moutain
-   elif tile > -0.1:
-     return ("/") #black
-   elif tile > -0.3:
-     return ("|") # black
-   else:
-     return(".")
- else: # just ocean
-  if tile > 0.3:
-    return ("/") # this should try to resemble some ice bergs or something
-  else:
-   return("-")
 def upgrades(xp,foodcap,movedis, energyrestore):
   clean()
   print("you have", xp,"xp, it costs 25 to upgrade")
@@ -151,8 +80,6 @@ def upgrades(xp,foodcap,movedis, energyrestore):
     print("closing menu. dont forget aswell, it takes 25 xp")
     time.sleep(2)
     clean()
-      
-  
 #### MAIN LOOP ####
 #seed effects the sises of the islands and such
 spawnrange = 999999 # this is how random-ness works for this program as the vaule x and y determins the seed so by having a massive range the randomness is increseed
@@ -162,7 +89,7 @@ x = spawn(spawnrange)
 y = spawn(spawnrange)
 # this just gets the render sise and makes sure its in the paramters of spawn range and not an odd number
 rendersise = input("choose render sise, and please have it as an even number ")
-clean()
+system("clear")
 try:
   rendersise = int(rendersise)
 except:
@@ -193,62 +120,16 @@ movedis = 10
 energyrestore = 10
 xp = 0
 stone = 0
-iron = 1
-#the main bit
+iron = 0
 while True:
- sys.stdout.write("\033[0;0f")#puts the curser at top of screen
- x = posx
- y = posy
- ydone = 0
- xdone = 1
- #rendering
- while True:
-   #this is all the vaules for the rending color, 
-  land = worldgen(x,y,seed)
-  if ydone == (0.5 * rendersise) and xdone == (0.5 * rendersise):
-    sys.stdout.write(u"\u001b[41m**") # the player
-  elif ydone == 0:
-    sys.stdout.write(u"\u001b[41m  ")#red for border
-  elif ydone == (maxy-1):
-    sys.stdout.write(u"\u001b[41m  ")#red for border
-  elif xdone == (maxx):
-    sys.stdout.write(u"\u001b[41m  ")#red
-  elif land == "+":
-     sys.stdout.write(u"\u001b[42m  ")#green
-     #this checks to see if it needs to re render the color
-  elif land == "=":
-    sys.stdout.write(u"\u001b[40m  ")#black
-  elif land == "/":
-     sys.stdout.write(u"\u001b[47m  ")#white
-  elif land == ".":
-    sys.stdout.write(u"\u001b[46m  ")#cyan
-  elif land == "|":
-    # gonna make this mineable blocks, so some rock can be mined at a better rate than others, and these ones have the possbliy to drop more iron, which will then be used to excape, and then maybe add a diffrent world you go to
-    sys.stdout.write(u"\u001b[40m::") #black
-  elif land == "x":
-    sys.stdout.write(u"\u001b[43;1m  ") # yellow
-  elif land == "H":
-    sys.stdout.write(u"\u001b[43m  ") #diffrent shade of yellow but i dont think it works in repl.it  
-  elif land == "-":
-    sys.stdout.write(u"\u001b[44m  ")
-  else:
-    sys.stdout.write(u"\u001b[44m  ")
-  #this is when line hits the 30th pixal
-  if xdone == (maxx): # goes to next line
-    #drops down to the bigeiing of the nest line so that the render sising code works
-    sys.stdout.write(u"\u001b[1000D")
-    sys.stdout.write(u"\u001b[1B")
-    x = posx
-    xdone = 0
-    ydone += 1
-    y += 1
-  if ydone == (maxy): # this is when the whole thing has rendered and contains options like moveing, sleeping, maybe eating at some point
-    sys.stdout.write(u"\u000b")
+  renderscreen(x,y,rendersise,posx,posy,maxy,maxx)
+  sys.stdout.write(u"\u000b")
+
     # brings the cursor to the start.
     #finsihs when this fully renders(there seems to be a glitch with the render) fixxed
-    sys.stdout.write(u"\u001b[0m")
-    action = input("what do you want to do ")
-    if action == "move": # this is the module for getting the player to move
+  sys.stdout.write(u"\u001b[0m") # trues off color
+  action = input("what do you want to do ")
+  if action == "move": # this is the module for getting the player to move
 
       #clear()
       while True: #this is a while true loop as i can use it to auto exit a secton and skip the other parts which a normal thign wont be able to do
@@ -294,14 +175,13 @@ while True:
       energy -= distance
 
       playerdata[0][0] += distance#distance travled
-      playerdata[0][1] += distance#xp gained
       """
       print(playerdata)
       time.sleep(3)
       """
       
       #this makes them only able to wal a curtain distance 
-    elif action == "sleep": #see if can sleep
+  elif action == "sleep": #see if can
      backupx = posx
      backupy = posy
      x = (rendersise/2) + posx
@@ -317,13 +197,12 @@ while True:
        clean()
      posx = backupx
      posy = backupy
-    elif action == "fish":
+  elif action == "fish":
      food_or_scrap = random.randint(1,4)
      if food > foodcap:
        print("you have to many fish")
        time.sleep(1)
        clean()
-       break
      backupx = posx
      backupy = posy
      x = (rendersise/2) + posx
@@ -352,7 +231,7 @@ while True:
        clean()
      posx = backupx
      posy = backupy
-    elif action == "eat": #this is if the player has food and if so lets them reafina some energy back from it but no more than 50
+  elif action == "eat": #this is if the player has food and if so lets them reafina some energy back from it but no more than 50
       if food > 0:
         print("you have eaten some food, you have regained some energy")
         energy += energyrestore
@@ -361,17 +240,18 @@ while True:
         clean()
         if energy > 50:
           energy = 50
-      if action == "die":
-        print("you died,")
-        time.sleep(3)
+        else:
+          print("you ate some food but you were already full")
+          time.sleep(1)
+          clean()
       else:
         print("you know, you can really eat food thats not there. Right?")
         time.sleep(1)
         clean()
-    elif action == "xp":
+  elif action == "xp":
       upgrades(xp,foodcap,movedis,energyrestore)
       print("you now have ",xp, " xp remaining")# the resone for this being a fucntion is i might change how it is done so by having this as a function will make it eair to move it
-    elif action == "mine":
+  elif action == "mine":
      stoneoriron = random.randint(1,4)#gets wether or not its iron
      backupx = posx# backups pos's
      backupy = posy
@@ -404,23 +284,19 @@ while True:
      posx = backupx#restores back up's
      posy = backupy
      energy -= 5
-    elif action == "quit":
+  elif action == "quit":
       gameover(playerdata)
-    else:
+  else:
       print("please retry")
       time.sleep(1)
       clean()
-    if energy <= 0:
+  if energy <= 0:
          print("you have run out of enegry, GAME OVER")
          time.sleep(2)
          gameover(playerdata)
-    print("your energy is ", energy)
-    time.sleep(1)
-    clean()
-    system('clear')#this wipes screen for next render
-    break
-  x += 1
-  xdone += 1
-  #this starts work on the next pixal
+  print("your energy is ", energy)
+  time.sleep(1)
+  clean()
+  system('clear')#this wipes screen for next render
 
 
