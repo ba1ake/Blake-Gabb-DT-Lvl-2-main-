@@ -7,7 +7,7 @@ from functions import worldgen
 from functions import gameover
 # to do
 #fix sleeping, fixed i think, i might even remove it
-playerdata = [[0,0],[0,0,0,0,0]]
+playerdata = [[0,0],[0,0,0,0,0]] # this stores the player data in two sets
 #the first list will be player exploring, there will be xp gained and distance travled
 # the second list will be upgrades done, items mined, items fished,
 print("welcome to my game, first things first this is a survial game, it is text based so you, the player, will have to enter text commands to make your player move,")
@@ -20,7 +20,7 @@ input("press enter when ready...")
 print("the commands are, move, eat, fish, xp, and sleep")
 input("press enter when ready to start...")
 system("clear")
-
+# that was the intro
 
 
 
@@ -41,10 +41,10 @@ def upgrades(xp,foodcap,movedis, energyrestore):
   if xp < 25:
     print("you do not have enough to upgrade your skills")
     time.sleep(2)
-    return
+    return("2")
   print()
   clean()
-  option = input("press and enter 1 for max food, 2 for speed, or 3 for energy from food ")
+  option = input("press and enter 1 for max food, 2 for speed, or 3 for energy from food: ")
   time.sleep(1)
   print()
   clean()
@@ -55,27 +55,27 @@ def upgrades(xp,foodcap,movedis, energyrestore):
       clean()
       playerdata[1][0] += 1 # this addes one upgrade to the count
       foodcap += 1
-      xp -=25
+      return ("1")
     elif option == "2":
       print("you can now run", movedis + 2,"blocks")
       time.sleep(1)
       clean()
       movedis +=2
       playerdata[1][0] += 1 # this addes one upgrade to the count
-      xp -= 25
+      return ("1")
     elif option == "3":
       energyrestore += 1
       print("food now restores", energyrestore, "energy")
       time.sleep(1)
       playerdata[1][0] += 1 # this addes one upgrade to the count
       clean()
-      xp -= 25
+      return ("1")
     elif option == "exit":
       print('exiting')
-      return
+      return("2")# this will exit the the upgrade menu
     else:
       ("invaild input, exiting from xp menu")
-      return
+      return "2"
   else:
     print("closing menu. dont forget aswell, it takes 25 xp")
     time.sleep(2)
@@ -93,7 +93,7 @@ system("clear")
 try:
   rendersise = int(rendersise)
 except:
-  print("not a int, setting to 20")
+  print("not a int, setting to 20") # this is a good defult sise that i found to work very well, sometimes repl mess;s up tho
   rendersise = 20
   time.sleep(2)
   clean()
@@ -105,7 +105,7 @@ else:
   time.sleep(2)
   clean()
   system('clear')
-
+# the number has to be even so that way when the border is taken off there is a uneven number of squares so there is a center point
 # just some stuff
 maxy = rendersise
 maxx = rendersise
@@ -128,8 +128,11 @@ while True:
     # brings the cursor to the start.
     #finsihs when this fully renders(there seems to be a glitch with the render) fixxed
   sys.stdout.write(u"\u001b[0m") # trues off color
-  action = input("what do you want to do ")
-  if action == "move": # this is the module for getting the player to move
+  action = input("what do you want to do: ")
+  if action == "help":
+    print("the commands are, sleep, eat, xp, fish, help, mine, move, and quit but we dont quit")
+
+  elif action == "move": # this is the module for getting the player to move
 
       #clear()
       while True: #this is a while true loop as i can use it to auto exit a secton and skip the other parts which a normal thign wont be able to do
@@ -138,7 +141,7 @@ while True:
          time.sleep(2)
          gameover(playerdata)
        try:
-        distance = int(input("now far "))
+        distance = int(input("how far: "))
         break
        except:
         print("not a int")
@@ -151,9 +154,9 @@ while True:
         
         print("")
         clean()
-      move = input("where? ")#all the vaild options
+      move = input("where?: ")#all the vaild options
       if move == "up":
-        posy -= distance
+        posy -= distance 
       elif move == "down":
         posy += distance
       elif move == "left":
@@ -163,7 +166,7 @@ while True:
       else:
         print("invaild direction")
         time.sleep(2)
-        energy += distance# this is so that the energy stays the same
+        # this is so that the energy stays the same
         distance = 0
       clean()
       clean()
@@ -172,14 +175,9 @@ while True:
       else:
         ree = 0 # this is ment to just pass this with out issues
   
-      energy -= distance
+      energy -= distance # that way the energy useage is based of of player movement
 
       playerdata[0][0] += distance#distance travled
-      """
-      print(playerdata)
-      time.sleep(3)
-      """
-      
       #this makes them only able to wal a curtain distance 
   elif action == "sleep": #see if can
      backupx = posx
@@ -198,14 +196,14 @@ while True:
      posx = backupx
      posy = backupy
   elif action == "fish":
-     food_or_scrap = random.randint(1,4)
+     food_or_scrap = random.randint(1,4) # this gets a rng vaule for what the item fished up will be
      if food > foodcap:
        print("you have to many fish")
        time.sleep(1)
        clean()
      backupx = posx
      backupy = posy
-     x = (rendersise/2) + posx
+     x = (rendersise/2) + posx # this gets the middle point of the screen
      y = (rendersise / 2) + posy
      if worldgen(x,y,seed) == "." or worldgen(x,y,seed) == "-":
        if food_or_scrap == 4:
@@ -225,6 +223,7 @@ while True:
        energy -= 1
        posy = backupy
        posx = backupx
+       # restets all the pos's and does the energy stuff
      else:
        print("fun fact, fishing with out water is somewhat hard to do")
        time.sleep(2)
@@ -239,7 +238,8 @@ while True:
         food -= 1
         clean()
         if energy > 50:
-          energy = 50
+          energy = 50 # this is to make sure the player cant have more than 50 energy at one time
+          
         else:
           print("you ate some food but you were already full")
           time.sleep(1)
@@ -249,7 +249,8 @@ while True:
         time.sleep(1)
         clean()
   elif action == "xp":
-      upgrades(xp,foodcap,movedis,energyrestore)
+      if upgrades(xp,foodcap,movedis,energyrestore) == "1":
+        xp -= 25
       print("you now have ",xp, " xp remaining")# the resone for this being a fucntion is i might change how it is done so by having this as a function will make it eair to move it
   elif action == "mine":
      stoneoriron = random.randint(1,4)#gets wether or not its iron

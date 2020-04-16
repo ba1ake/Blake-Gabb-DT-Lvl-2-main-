@@ -3,6 +3,7 @@ import sys
 import time
 from os import system
 seed = 10
+#this list manying has getting the game to work while the game holds funtoins in realtion to the games fetures and design
 def worldgen(x,y,seed):
   #this is some code i got in order toit get vaules via pnoise2, it is a simple algorwith that helps and such
  tile = (pnoise2(x/seed,y/seed,2))
@@ -123,6 +124,7 @@ def gameover(playerdata):
   score += (playerdata[1][2])
   score += ((playerdata[1][3])*2)
   score += ((playerdata[1][4])*5)
+  #this is all the vaules added up to be the score
   print("your overall score is...")
   time.sleep(1)
   if score == 0:
