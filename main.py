@@ -34,52 +34,6 @@ def clean():
         sys.stdout.write(u"\u001b[1A")
         sys.stdout.write(u"\u001b[2K")#wipes line
 energy = 50
-def upgrades(xp,foodcap,movedis, energyrestore):
-  clean()
-  print("you have", xp,"xp, it costs 25 to upgrade")
-  time.sleep(2)
-  if xp < 25:
-    print("you do not have enough to upgrade your skills")
-    time.sleep(2)
-    return("2")
-  print()
-  clean()
-  option = input("press and enter 1 for max food, 2 for speed, or 3 for energy from food: ")
-  time.sleep(1)
-  print()
-  clean()
-  if xp > 25:
-    if option == "1":
-      print("max food cap has been upgraded to", foodcap + 1)
-      time.sleep(1)
-      clean()
-      playerdata[1][0] += 1 # this addes one upgrade to the count
-      foodcap += 1
-      return ("1")
-    elif option == "2":
-      print("you can now run", movedis + 2,"blocks")
-      time.sleep(1)
-      clean()
-      movedis +=2
-      playerdata[1][0] += 1 # this addes one upgrade to the count
-      return ("1")
-    elif option == "3":
-      energyrestore += 1
-      print("food now restores", energyrestore, "energy")
-      time.sleep(1)
-      playerdata[1][0] += 1 # this addes one upgrade to the count
-      clean()
-      return ("1")
-    elif option == "exit":
-      print('exiting')
-      return("2")# this will exit the the upgrade menu
-    else:
-      ("invaild input, exiting from xp menu")
-      return "2"
-  else:
-    print("closing menu. dont forget aswell, it takes 25 xp")
-    time.sleep(2)
-    clean()
 #### MAIN LOOP ####
 #seed effects the sises of the islands and such
 spawnrange = 999999 # this is how random-ness works for this program as the vaule x and y determins the seed so by having a massive range the randomness is increseed
@@ -118,7 +72,7 @@ scrap = 0
 foodcap = 5
 movedis = 10
 energyrestore = 10
-xp = 0
+xp = 99
 stone = 0
 iron = 0
 while True:
@@ -249,9 +203,49 @@ while True:
         time.sleep(1)
         clean()
   elif action == "xp":
-      if upgrades(xp,foodcap,movedis,energyrestore) == "1":
+    clean()
+    print("you have", xp,"xp, it costs 25 to upgrade")
+    time.sleep(2)
+    if xp < 25:
+      print("you do not have enough to upgrade your skills")
+      time.sleep(2)
+    print()
+    clean()
+    option = input("press and enter 1 for max food, 2 for speed, or 3 for energy from food: ")
+    time.sleep(1)
+    print()
+    clean()
+    if xp > 25:
+      if option == "1":
+        print("max food cap has been upgraded to", foodcap + 1)
+        time.sleep(1)
+        clean()
+        playerdata[1][0] += 1 # this addes one upgrade to the count
+        foodcap += 1
         xp -= 25
-      print("you now have ",xp, " xp remaining")# the resone for this being a fucntion is i might change how it is done so by having this as a function will make it eair to move it
+      elif option == "2":
+        print("you can now run", movedis + 2,"blocks")
+        time.sleep(1)
+        clean()
+        movedis +=2
+        playerdata[1][0] += 1 # this addes one upgrade to the count
+        xp -= 25
+      elif option == "3":
+        energyrestore += 1
+        print("food now restores", energyrestore, "energy")
+        time.sleep(1)
+        playerdata[1][0] += 1 # this addes one upgrade to the count
+        clean()
+        xp -= 25
+      elif option == "exit":
+        print('exiting')# this will exit the the upgrade menu
+      else:
+        ("invaild input, exiting from xp menu")
+    else:
+      print("closing menu. dont forget aswell, it takes 25 xp")
+      time.sleep(2)
+      clean()
+    print("you now have ",xp, " xp remaining")# the resone for this being a fucntion is i might change how it is done so by having this as a function will make it eair to move it
   elif action == "mine":
      stoneoriron = random.randint(1,4)#gets wether or not its iron
      backupx = posx# backups pos's
