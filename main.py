@@ -267,7 +267,7 @@ while True:
         playerdata[1][2] += 2 # adds 2 to the stone count overall
         time.sleep(2)
      xp += 1
-     playerdata[0][1] += 1
+     playerdata[0][1] += 1 # adds data to the muti dimsinal array, or list. what ever its called
      clean()
      posy = backupy
      posx = backupx
@@ -280,9 +280,9 @@ while True:
      posy = backupy
      energy -= 5
   elif action == "quit":
-      gameover(playerdata)
+      gameover(playerdata) # plays the final scoreboard
   else:
-      print("please retry")
+      print("please retry") #this tells the player to try and reenter their input
       time.sleep(1)
       clean()
   if energy <= 0:
