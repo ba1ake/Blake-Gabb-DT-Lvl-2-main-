@@ -5,26 +5,16 @@ from os import system
 from functions import renderscreen
 from functions import worldgen
 from functions import gameover
+AIPOSx = ["null"]
+AIPOSy = ["null"]
 # to do
 #fix sleeping, fixed i think, i might even remove it
 playerdata = [[0,0],[0,0,0,0,0]] # this stores the player data in two sets
 #the first list will be player exploring, there will be xp gained and distance travled
-# the second list will be upgrades done, items mined, items fished,
-print("welcome to my game, first things first this is a survial game, it is text based so you, the player, will have to enter text commands to make your player move,")
-time.sleep(4)
-input("press enter when ready...")
-system("clear")
-print("there are diffrent tpyes of blocks, green blocks are grass, they let you sleep on them, grey blocks are stone, you can not sleep on them. If they have a '::' pattern on them then you are able to mine on them and get iron or stone, light blue blocks is shallow water, and dark blue blocks is deep water, on both of these tiles you are able to fish for, well, fish, and finally white tiles are snow. your player is shown by the red pixal in the center of the screen")
-time.sleep(4)
-input("press enter when ready...")
-print("the commands are, move, eat, fish, xp, and sleep")
-input("press enter when ready to start...")
-system("clear")
-# that was the intro
-
-
-
+# the second list will be upgrades done, items mined, items fishe
 #some functions remain in this file
+
+
 def spawn(spawnrange):
   return(random.randint((spawnrange*-1 ), spawnrange))
   #this gens the spawn area to a range set.
@@ -35,32 +25,11 @@ def clean():
         sys.stdout.write(u"\u001b[2K")#wipes line
 energy = 50
 #### MAIN LOOP ####
-#seed effects the sises of the islands and such
-spawnrange = 999999 # this is how random-ness works for this program as the vaule x and y determins the seed so by having a massive range the randomness is increseed
-#this makes it so that the player has the same map but has a diffrent spawn region each time
+spawnrange = 0 
 seed = 10
 x = spawn(spawnrange)
 y = spawn(spawnrange)
-# this just gets the render sise and makes sure its in the paramters of spawn range and not an odd number
-rendersise = input("choose render sise, and please have it as an even number ")
-system("clear")
-try:
-  rendersise = int(rendersise)
-except:
-  print("not a int, setting to 20") # this is a good defult sise that i found to work very well, sometimes repl mess;s up tho
-  rendersise = 20
-  time.sleep(2)
-  clean()
-if rendersise % 2 == 0:
-  pass
-else:
-  rendersise += 1
-  print("number was not even, adding one to it to fix this")
-  time.sleep(2)
-  clean()
-  system('clear')
-# the number has to be even so that way when the border is taken off there is a uneven number of squares so there is a center point
-# just some stuff
+rendersise = 20
 maxy = rendersise
 maxx = rendersise
 posx = x
@@ -75,20 +44,30 @@ energyrestore = 10
 xp = 99
 stone = 0
 iron = 0
+aialive = 0
 while True:
-  renderscreen(x,y,rendersise,posx,posy,maxy,maxx)
+  if aialive == 0:
+   aix = random.randint(1,10)
+   aix += posx
+   aiy = random.randint(1,10)
+   aiy += posy
+  renderscreen(x,y,rendersise,posx,posy,maxy,maxx,aialive,aix,aiy,playerdata)
+  if aix > (0.5 * rendersise):
+    aix -= 2
+  else:
+    aix += 2
+  if aiy > (0.5 * rendersise):
+    aiy -=2
+  else:
+    aiy+= 2
+  aialive = 1#render funtion
   sys.stdout.write(u"\u000b")
-
-    # brings the cursor to the start.
-    #finsihs when this fully renders(there seems to be a glitch with the render) fixxed
-  sys.stdout.write(u"\u001b[0m") # trues off color
+  sys.stdout.write(u"\u001b[0m") #stops color
   action = input("what do you want to do: ")
   if action == "help":
     print("the commands are, sleep, eat, xp, fish, help, mine, move, and quit but we dont quit")
 
-  elif action == "move": # this is the module for getting the player to move
-
-      #clear()
+  elif action == "move": 
       while True: #this is a while true loop as i can use it to auto exit a secton and skip the other parts which a normal thign wont be able to do
        if energy <= 0:
          print("you have run out of enegry, GAME OVER")
@@ -101,22 +80,26 @@ while True:
         print("not a int")
         time.sleep(1)
         clean()
-      if distance > movedis: #this makes sure the player doesnt go to far
+      if distance > movedis:
         print("to far, moving by", movedis)
         time.sleep(1)
         distance = movedis
         
         print("")
         clean()
-      move = input("where?: ")#all the vaild options
+      move = input("where?: ")
       if move == "up":
         posy -= distance 
+        aiy += distance
       elif move == "down":
         posy += distance
+        aiy -= distance
       elif move == "left":
         posx -= distance
+        aix += distance
       elif move == "right":
         posx += distance
+        aix -= distance
       else:
         print("invaild direction")
         time.sleep(2)
@@ -127,13 +110,11 @@ while True:
       if distance < 0:
         distance = distance * -1
       else:
-        ree = 0 # this is ment to just pass this with out issues
+        ree = 0
   
-      energy -= distance # that way the energy useage is based of of player movement
-
-      playerdata[0][0] += distance#distance travled
-      #this makes them only able to wal a curtain distance 
-  elif action == "sleep": #see if can
+      energy -= distance
+      playerdata[0][0] += distance 
+  elif action == "sleep":
      backupx = posx
      backupy = posy
      x = (rendersise/2) + posx

@@ -2,6 +2,7 @@ from noise import pnoise2
 import sys
 import time
 from os import system
+import random
 seed = 10
 #this list manying has getting the game to work while the game holds funtoins in realtion to the games fetures and design
 def worldgen(x,y,seed):
@@ -47,7 +48,7 @@ def worldgen(x,y,seed):
     return ("/") # this should try to resemble some ice bergs or something
   else:
    return("-")
-def renderscreen(x,y,rendersise,posx,posy,maxy,maxx):
+def renderscreen(x,y,rendersise,posx,posy,maxy,maxx,aialive,aix,aiy,playerdata):
  while True:
   sys.stdout.write("\033[0;0f")#puts the curser at top of screen
   x = posx
@@ -58,8 +59,14 @@ def renderscreen(x,y,rendersise,posx,posy,maxy,maxx):
   while True:
    #this is all the vaules for the rending color, 
    land = worldgen(x,y,seed)
+   #print((xdone + x), (ydone + y))
+   #print(aix, aiy)
+   if aix == (0.5 * rendersise) and aiy == (0.5 * rendersise):
+     gameover(playerdata)
    if ydone == (0.5 * rendersise) and xdone == (0.5 * rendersise):
     sys.stdout.write(u"\u001b[41m**") # the player
+   elif xdone == aix and ydone == aiy:
+     sys.stdout.write(u"\u001b[41m++")
    elif ydone == 0:
     sys.stdout.write(u"\u001b[41m  ")#red for border
    elif ydone == (maxy-1):
@@ -142,3 +149,8 @@ def gameover(playerdata):
   time.sleep(2)
   input("press enter to exit")
   exit()
+
+
+
+
+
