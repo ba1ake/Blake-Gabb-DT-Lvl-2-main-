@@ -66,7 +66,7 @@ def renderscreen(x,y,rendersise,posx,posy,maxy,maxx,aialive,aix,aiy,playerdata):
    if ydone == (0.5 * rendersise) and xdone == (0.5 * rendersise):
     sys.stdout.write(u"\u001b[41m**") # the player
    elif xdone == aix and ydone == aiy:
-     sys.stdout.write(u"\u001b[41m++")
+     sys.stdout.write(u"\u001b[43m++")
    elif ydone == 0:
     sys.stdout.write(u"\u001b[41m  ")#red for border
    elif ydone == (maxy-1):
@@ -109,6 +109,8 @@ def renderscreen(x,y,rendersise,posx,posy,maxy,maxx,aialive,aix,aiy,playerdata):
        xdone += 1
 def gameover(playerdata):
   system('clear')
+  print("you have died")
+  time.sleep(2)
   print("you traveled over ", playerdata[0][0], " blocks over all")
   #this section gets all the data from the muti dimesion array and then prints it as a score board for the player and then uses it to get an over all score, it is dont as a function as there is two ways of getting the game over
   time.sleep(2)

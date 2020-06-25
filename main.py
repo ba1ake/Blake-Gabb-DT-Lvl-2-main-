@@ -5,9 +5,8 @@ from os import system
 from functions import renderscreen
 from functions import worldgen
 from functions import gameover
-AIPOSx = ["null"]
-AIPOSy = ["null"]
-# to do
+#makes the AIs list
+#to do
 #fix sleeping, fixed i think, i might even remove it
 playerdata = [[0,0],[0,0,0,0,0]] # this stores the player data in two sets
 #the first list will be player exploring, there will be xp gained and distance travled
@@ -25,7 +24,7 @@ def clean():
         sys.stdout.write(u"\u001b[2K")#wipes line
 energy = 50
 #### MAIN LOOP ####
-spawnrange = 0 
+spawnrange = 0
 seed = 10
 x = spawn(spawnrange)
 y = spawn(spawnrange)
@@ -44,23 +43,51 @@ energyrestore = 10
 xp = 99
 stone = 0
 iron = 0
-aialive = 0
+aialive = [0,0,0]
+aisx = []
+aisy = []
+#even numbers IE 2,4,6 will be things that attack fast
+#odd nubers will be things that can not see oyu at ling ranges.
+# threses will be gened at random given the diffacty mutiplyer
+# ^ all the above info is only run twice and is info for the game to int
 while True:
+  if aialive < 0:
+    aialive += 1
+    aix = 0
+    aiy = 0
   if aialive == 0:
-   aix = random.randint(1,10)
+   aix = random.randint(1,20)
    aix += posx
-   aiy = random.randint(1,10)
+   aiy = random.randint(1,20)
    aiy += posy
+   print("ai respawned")
+   time.sleep(2)
+   aialive = 1
+
   renderscreen(x,y,rendersise,posx,posy,maxy,maxx,aialive,aix,aiy,playerdata)
+  #this is the code for the th8ingy to move his pos
   if aix > (0.5 * rendersise):
-    aix -= 2
+    aix -= 1
+  elif aix < (0.5 * rendersise):
+    aix += 1
   else:
-    aix += 2
-  if aiy > (0.5 * rendersise):
-    aiy -=2
+    if aiy > (0.5 * rendersise):
+      aiy -=1
+    elif aiy < (0.5 * rendersise):
+      aiy+= 1
+    else:
+      print()
+  if aiy > 20 or aiy < -20:
+   if aialve > 0:
+    aialive = -5
+    print("ai lost")
+  elif aix > 20 or aix < -20:
+   if aialve > 0:
+    aialive = -5
+    print("ai lost")
   else:
-    aiy+= 2
-  aialive = 1#render funtion
+    aialive = 1
+    #render funtion
   sys.stdout.write(u"\u000b")
   sys.stdout.write(u"\u001b[0m") #stops color
   action = input("what do you want to do: ")
